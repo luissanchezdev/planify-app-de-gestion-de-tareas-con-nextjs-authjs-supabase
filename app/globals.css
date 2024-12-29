@@ -31,3 +31,17 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  form {
+    @apply p-2 my-2 border border-gray-300 rounded-md gap-4;
+  }
+
+  input {
+    @apply p-2 text-lg rounded-md;
+  }
+
+  button {
+    @apply p-2 text-lg rounded-md bg-white text-black;
+  }
+}

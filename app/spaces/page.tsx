@@ -1,5 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
+import AddSpaceForm from "../components/spaces/AddSpaceForm";
+import { SessionProvider } from "next-auth/react";
 
 async function Spaces() {
   const session = await auth()
@@ -12,7 +14,10 @@ async function Spaces() {
     <div>
       <h1>Spaces</h1>
       {
-        session && <p>Bienvenido, { session.user?.name }</p>
+        session && 
+          <SessionProvider>
+            <AddSpaceForm />
+          </SessionProvider>
       }
     </div>
   )
