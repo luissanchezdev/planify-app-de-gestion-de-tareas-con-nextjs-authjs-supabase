@@ -18,8 +18,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true
     },
     async redirect({ url, baseUrl }) {
-      if (url === "/dashboard") return url
-      return `${baseUrl}/dashboard`
+      if (url === "/spaces") return url
+      return `${baseUrl}/spaces`
     },
     async session({ session, user }) {
       const signingSecret = process.env.SUPABASE_JWT_SECRET
