@@ -3,7 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { schemAddSpaceForm } from "@/schemas/SchemaAddSpacForm"
 import { useSession } from "next-auth/react"
-import { supabase } from "@/lib/supabaseClient"
+import { useDispatch } from "react-redux"
+import { addSpace } from "@/lib/redux/slices/spaceSlice"
 
 interface IAddSpaceFormInputs {
   title: string,
@@ -12,9 +13,12 @@ interface IAddSpaceFormInputs {
 }
 
 function AddSpaceForm() {
+
   // En componentes de cliente no se usa el adaptador de auth ni de supabase ?, se usa el hook useSession. Pero para esto debo usar el provider SessionProvider en el componente padre. En este caso en /spaces/page.tsx que es el componente padre.
   const { data: session } = useSession()
   console.log(session)
+
+  const dispatch = useDispatch()
 
   const {
     register,
@@ -26,7 +30,21 @@ function AddSpaceForm() {
   })
 
   const onSubmit: SubmitHandler<IAddSpaceFormInputs> = async (data) => {
-    console.log({
+
+    if(session?.user?.id) {
+
+      const dataSpace = {
+        ...data,
+        user_id: session?.user?.id
+      }
+  
+      await dispatch(addSpace(dataSpace))
+      console.log("Espacio creado:", dataSpace);
+      reset()
+    }
+
+
+    /* console.log({
       dataForVerify: data,
       session: session
     })
@@ -45,9 +63,7 @@ function AddSpaceForm() {
     if (error) {
       console.error("Error al crear el espacio:", error);
       return;
-    }
-    console.log("Espacio creado:", dataSpace);
-    reset()
+    } */
   }
   
   return (
