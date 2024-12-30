@@ -24,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return `${baseUrl}/spaces`
     },
     async session({ session, user }) {
-      const signingSecret = process.env.SUPABASE_JWT_SECRET
+      /* const signingSecret = process.env.SUPABASE_JWT_SECRET
       if (signingSecret) {
           const payload = {
               aud: "authenticated",
@@ -34,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               role: "authenticated", // Puedes definir roles basados en tu lógica de negocio
           }
           session.supabaseAccessToken = jwt.sign(payload, signingSecret)
-      }
+      } */
       return session
     },
     async jwt({ token, account, user }) {
