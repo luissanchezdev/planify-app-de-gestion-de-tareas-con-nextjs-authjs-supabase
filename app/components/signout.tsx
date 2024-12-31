@@ -1,4 +1,5 @@
 import { signOut } from "@/auth"
+import { Button } from "@/components/ui/button"
 import { redirect } from "next/navigation"
 
 function BtnSignOut() {
@@ -8,7 +9,7 @@ function BtnSignOut() {
       await signOut()
       redirect('/')
     }}>
-      <button type="submit">Cerrar sesión</button>
+      <Button type="submit" variant={'link'}>➡️</Button>
     </form>
   )
 }

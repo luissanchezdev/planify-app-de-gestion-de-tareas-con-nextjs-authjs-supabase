@@ -6,6 +6,10 @@ import { useSession } from "next-auth/react"
 import { useDispatch } from "react-redux"
 import { addSpace } from "@/lib/redux/slices/spaceSlice"
 import { supabase } from "@/lib/supabaseClient"
+import { Card, CardFooter, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
 
 interface IAddSpaceFormInputs {
   title: string,
@@ -89,26 +93,27 @@ function AddSpaceForm() {
   }
   
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+    <Card className="flex flex-col justify-center items-center gap-4 p-6">
+      <h3 className="text-lg text-gray-700 text-center">Agregar espacio</h3>
+      <form onSubmit={handleSubmit(onSubmit)} className="p-2 flex flex-col justify-center items-center gap-2 w-full">
+        <div className="w-full">
           <label htmlFor="title">Título</label>
-          <input className="dark:text-black" id="title" type="text" placeholder="Planeando..." {...register("title")} />
+          <Input className="dark:text-black" id="title" type="text" placeholder="Es necesario hacer..." {...register("title")} />
           { errors.title && <p>{ errors.title.message }</p> }
         </div>
-        <div>
+        <div className="w-full">
           <label htmlFor="description">Descripción</label>
-          <input className="dark:text-black" id="description" type="text" placeholder="Planeando..." {...register("description")} />
+          <Input className="dark:text-black" id="description" type="text" placeholder="Lo voy ha realizar así..." {...register("description")} />
           { errors.description && <p>{ errors.description.message }</p> }
         </div>
-        <div>
+        <div className="w-full">
           <label htmlFor="tag">Etiqueta</label>
-          <input className="dark:text-black" id="tag" type="text" placeholder="Planeando..." {...register("tag")} />
+          <Input className="dark:text-black" id="tag" type="text" placeholder="Categoría..." {...register("tag")} />
           { errors.tag && <p>{ errors.tag.message }</p> }
         </div>
-        <button type="submit">Crear espacio</button>
+        <Button type="submit" className="bg-luissdev-650 mt-2">Crear espacio</Button>
       </form>
-    </div>
+    </Card>
   )
 }
 
