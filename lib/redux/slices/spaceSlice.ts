@@ -1,10 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import SpaceService from "@/app/services/spaceService";
 import { ISpace } from "@/types/types";
 
 let initialState : ISpace[] = []
 
+/* // El estado inicial será [], no se usará esta función para obtener el estado inicial, pero sí se usar en una acción asincrona con createAsyncThunk
 const getServices = async () => {
   try {
     const data = await SpaceService.getAllSpaces()
@@ -17,7 +18,7 @@ const getServices = async () => {
   }
 }
 
-getServices()
+getServices() */
 
 
 export const spaceSlice = createSlice({
@@ -32,9 +33,14 @@ export const spaceSlice = createSlice({
           ...action.payload
         }
       ]
+    },
+    updateInitialState(state: ISpace[], action: PayloadAction<ISpace[]>){
+      return [
+        ...action.payload
+      ]
     }
   }
 })
 
-export const { addSpace } = spaceSlice.actions
+export const { addSpace, updateInitialState } = spaceSlice.actions
 export default spaceSlice.reducer

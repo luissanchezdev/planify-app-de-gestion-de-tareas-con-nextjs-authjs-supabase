@@ -1,21 +1,18 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import AddSpaceForm from "../components/spaces/AddSpaceForm";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, signOut } from "next-auth/react";
 import SpaceList from "../components/spaces/SpaceList";
+import BtnSignOut from "../components/signout";
 
 async function Spaces() {
   const session = await auth()
-
-  if(!session) {
-    <p>Usuario no autenticado</p>
-  }
 
   return (
     <div>
       <h1>Spaces</h1>
       {
-        session && 
+        session &&
           <SessionProvider>
             <main>
               <AddSpaceForm />
@@ -24,7 +21,8 @@ async function Spaces() {
               </section>
             </main>
           </SessionProvider>
-      }
+    }
+      
     </div>
   )
 }

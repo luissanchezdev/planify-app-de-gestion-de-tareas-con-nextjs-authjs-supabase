@@ -5,8 +5,16 @@ import { schemAddSpaceForm } from "@/schemas/SchemaAddSpacForm"
 import { useSession } from "next-auth/react"
 import { useDispatch } from "react-redux"
 import { addSpace } from "@/lib/redux/slices/spaceSlice"
+import { supabase } from "@/lib/supabaseClient"
 
 interface IAddSpaceFormInputs {
+  title: string,
+  description: string,
+  tag: string
+}
+
+interface ISpaceData {
+  user_id : string,
   title: string,
   description: string,
   tag: string
@@ -33,12 +41,26 @@ function AddSpaceForm() {
 
     if(session?.user?.id) {
 
-      const dataSpace = {
-        ...data,
-        user_id: session?.user?.id
-      }
+    const dataSpace = {
+      user_id: session?.user?.id,
+        title: data.title,
+        description: data.description,
+        tag: data.tag
+    }
+
+    const { data : dataSupabase , error } = await supabase
+    .from('spaces')
+    .insert([
+      dataSpace
+    ])
+    .select()
+
+    if (error) {
+      console.error("Error al crear el espacio:", error);
+      return;
+    }
   
-      await dispatch(addSpace(dataSpace))
+      dispatch(addSpace(dataSpace))
       console.log("Espacio creado:", dataSpace);
       reset()
     }

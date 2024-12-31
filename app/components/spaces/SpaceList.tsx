@@ -1,19 +1,20 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import type { ISpace } from "@/types/types"
-
+import { useSelector } from "react-redux"
+import type { RootState } from "@/store"
 import { supabase } from "@/lib/supabaseClient"
+import { useDispatch } from "react-redux"
+import { updateInitialState } from "@/lib/redux/slices/spaceSlice"
 
 function SpaceList() {
 
-  const [spaces, setSpaces] = useState<ISpace[]>([])
+  const spaces = useSelector((state : RootState)  => state.spaces)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    getSpaces()
-  }, [])
+  const dispatch = useDispatch()
 
-  const getSpaces = async () => {
+  const getSpaces = useCallback((async () => {
     const { data , error } = await supabase.from('spaces').select('*')
 
     if(error) {
@@ -22,10 +23,18 @@ function SpaceList() {
     }
 
     if(data){
-      setSpaces(data)
+      console.log({ data })
+      dispatch(updateInitialState(data))
+      
     }
-  }
+  }),[dispatch]
+)
 
+  useEffect(() => {
+    getSpaces()
+  }, [getSpaces])
+
+  
   error && <p>Se ha presentado un problema recuperando los datos</p>
 
   if(spaces.length === 0) {
