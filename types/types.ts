@@ -9,8 +9,7 @@ export interface ISpace {
 export interface IAddTaskFormInputs {
   title: string,
   description: string,
-  tag: string,
-  completed: boolean
+  tag: string
 }
 
 export interface ITaskData {
@@ -19,7 +18,7 @@ export interface ITaskData {
   title: string,
   description: string,
   tag: string,
-  complete: boolean
+  completed: boolean
 }
 
 export interface ITaskProps {

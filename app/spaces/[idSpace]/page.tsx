@@ -9,12 +9,26 @@ import { useCallback, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { updateInitialState } from "@/lib/redux/slices/spaceSlice"
+import AddTaskForm from "@/app/components/tasks/TaskForm"
+import { SubmitHandler, useForm } from "react-hook-form"
+
+interface ITestFormInputs {
+  title : string
+}
+
 
 function SpaceDetailPage() {
   const [ error, setError ] = useState<string>('')
   const { idSpace } = useParams()
   console.log({ idSpace })
   
+  const { 
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ITestFormInputs>()
+
+
   const dispatch = useDispatch()
 
   const getSpaces = useCallback((async () => {
@@ -48,6 +62,10 @@ function SpaceDetailPage() {
   if(!space){
     return  <p>Espacio no encontrado</p>
   }
+
+  const onSumitTwo = (data : ITestFormInputs) => {
+    console.log({ data })
+  }
   
 
   return (
@@ -72,10 +90,21 @@ function SpaceDetailPage() {
         <p>{ space.description }</p>
         <p>🔖 { space.tag }</p>
       </Card>
-      <h1>Detalle de espacio</h1>
-      <h2>{ space.title }</h2>
     </div>
-    
+    <div className="flex flex-col gap-4 p-4">
+      <AddTaskForm
+        spaceId={ space.id }
+        userId={ space.user_id }
+    />
+
+    </div>
+    <div>
+      <h3>Formulario de prueba</h3>
+      <form onSubmit={handleSubmit(onSumitTwo)}>
+        <input type="text" {...register('title')} />
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
     </>
     
   )

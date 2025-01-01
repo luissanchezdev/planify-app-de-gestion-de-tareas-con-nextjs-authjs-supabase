@@ -1,7 +1,7 @@
 "use client"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { schemAddTaskForm } from "@/schemas/SchemaAddTask"
+import { schemaAddTaskForm } from "@/schemas/SchemaAddTask"
 import { useDispatch } from "react-redux"
 import { supabase } from "@/lib/supabaseClient"
 import { Card } from "../ui/card"
@@ -13,6 +13,11 @@ import { addTask } from "@/lib/redux/slices/taskSlice"
 
 function AddTaskForm({ userId, spaceId } : ITaskProps) {
 
+  console.log({
+    userId,
+    spaceId
+  })
+
   const dispatch = useDispatch()
 
   const {
@@ -21,10 +26,14 @@ function AddTaskForm({ userId, spaceId } : ITaskProps) {
     formState: { errors },
     reset
   } = useForm<IAddTaskFormInputs>({
-    resolver: zodResolver(schemAddTaskForm)
+    resolver: zodResolver(schemaAddTaskForm)
   })
 
+  console.log('here')
+
   const onSubmit: SubmitHandler<IAddTaskFormInputs> = async (data) => {
+
+    console.log({ data })
 
     const dataTask : ITaskData = {
         space_id: spaceId,
@@ -32,7 +41,7 @@ function AddTaskForm({ userId, spaceId } : ITaskProps) {
         title: data.title,
         description: data.description,
         tag: data.tag,
-        complete: true
+        completed: true
     }
 
     console.log({ dataTask })
