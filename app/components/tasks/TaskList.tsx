@@ -10,7 +10,7 @@ import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
 
-function SpaceList() {
+function TaskList() {
 
   const spaces = useSelector((state : RootState)  => state.spaces)
   const [error, setError] = useState<string | null>(null)
@@ -86,4 +86,4 @@ function SpaceList() {
   )
 }
 
-export default SpaceList
+export default TaskList

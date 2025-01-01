@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import spaceReducer from "./lib/redux/slices/spaceSlice";
+import taskReducer from "./lib/redux/slices/taskSlice";
 
 export const store = configureStore({
   reducer: {
-    'spaces' : spaceReducer
+    'spaces' : spaceReducer,
+    'tasks' : taskReducer
   }
 })
 

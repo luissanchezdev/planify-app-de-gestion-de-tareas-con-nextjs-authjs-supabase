@@ -1,5 +1,5 @@
 import { signOut } from "@/auth"
-import { Button } from "@/components/ui/button"
+import { Button } from "./ui/button"
 import { redirect } from "next/navigation"
 
 function BtnSignOut() {

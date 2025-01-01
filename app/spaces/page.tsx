@@ -4,13 +4,22 @@ import AddSpaceForm from "../components/spaces/AddSpaceForm";
 import { SessionProvider, signOut } from "next-auth/react";
 import SpaceList from "../components/spaces/SpaceList";
 import BtnSignOut from "../components/signout";
+import Link from "next/link";
 
 async function Spaces() {
   const session = await auth()
 
   return (
     <div className="flex flex-col justify-center items-center gap-6">
-      <h2 className="text-xl text-gray-700 text-center">Espacios 🚀</h2>
+        <div className="flex gap-1 text-xl text-gray-400 text-center">
+          <Link href={'/'} className="inline-block ">
+            <p>Inicio</p>
+          </Link>
+          /
+          <Link href={'/spaces'} className="inline-block text-gray-700">
+            <h2> Espacios 🚀</h2>
+          </Link>
+      </div>
       <main>
         {
           session &&

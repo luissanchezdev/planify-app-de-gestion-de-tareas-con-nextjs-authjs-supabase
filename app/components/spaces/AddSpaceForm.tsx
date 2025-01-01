@@ -6,10 +6,10 @@ import { useSession } from "next-auth/react"
 import { useDispatch } from "react-redux"
 import { addSpace } from "@/lib/redux/slices/spaceSlice"
 import { supabase } from "@/lib/supabaseClient"
-import { Card, CardFooter, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Form } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
+import { Card } from "../ui/card"
+import { Input } from "../ui/input"
+import { Form } from "../ui/form"
+import { Button } from "../ui/button"
 
 interface IAddSpaceFormInputs {
   title: string,
