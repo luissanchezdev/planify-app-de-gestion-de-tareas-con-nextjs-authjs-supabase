@@ -13,12 +13,13 @@ import { Button } from "../ui/button"
 function SpaceList() {
 
   const spaces = useSelector((state : RootState)  => state.spaces)
+  const user = useSelector((state : RootState)  => state.user)
   const [error, setError] = useState<string | null>(null)
 
   const dispatch = useDispatch()
 
   const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*')
+    const { data , error } = await supabase.from('spaces').select('*').gte('user_id', `${user.user?.id}` )
 
     if(error) {
       console.log(error)
@@ -26,11 +27,10 @@ function SpaceList() {
     }
 
     if(data){
-      console.log({ data })
       dispatch(updateInitialState(data))
       
     }
-  }),[dispatch]
+  }),[dispatch, user.user?.id]
 )
 
   useEffect(() => {

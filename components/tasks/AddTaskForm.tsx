@@ -2,21 +2,17 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { schemaAddTaskForm } from "@/schemas/SchemaAddTask"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { supabase } from "@/lib/supabaseClient"
 import { Card } from "../ui/card"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { IAddTaskFormInputs, ITaskData, ITaskProps } from "@/types/types"
 import { addTask } from "@/redux/slices/taskSlice"
+import { useParams } from "next/navigation"
+import { RootState } from "@/redux/store"
 
-
-function AddTaskForm({ userId, spaceId } : ITaskProps) {
-
-  console.log({
-    userId,
-    spaceId
-  })
+function AddTaskForm({ spaceId, userId } : { spaceId : string, userId : string}) {
 
   const dispatch = useDispatch()
 
@@ -29,11 +25,14 @@ function AddTaskForm({ userId, spaceId } : ITaskProps) {
     resolver: zodResolver(schemaAddTaskForm)
   })
 
-  console.log('here')
-
   const onSubmit: SubmitHandler<IAddTaskFormInputs> = async (data) => {
 
     console.log({ data })
+
+    if (!userId) {
+      console.error("Error: userId is undefined");
+      return;
+    }
 
     const dataTask : ITaskData = {
         space_id: spaceId,
@@ -44,14 +43,19 @@ function AddTaskForm({ userId, spaceId } : ITaskProps) {
         completed: true
     }
 
-    console.log({ dataTask })
-
     const { data : dataSupabase , error } = await supabase
     .from('tasks')
     .insert([
       dataTask
     ])
     .select()
+
+    if(data) {
+      dispatch(addTask(dataTask))
+    }
+
+    // Va el dispatch de la nueva tarea, usando la tarea devuelta por supabase después del INSERT
+    // dispatch(AddTask(data))
 
     if (error) {
       console.error("Error al crear la tarea:", error);

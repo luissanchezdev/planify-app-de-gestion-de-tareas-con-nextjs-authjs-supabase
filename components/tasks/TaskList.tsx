@@ -9,33 +9,42 @@ import { updateInitialState } from "@/redux/slices/spaceSlice"
 import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { updateInitialTaskState } from "@/redux/slices/taskSlice"
 
-function TaskList() {
+function TaskList({spaceId, userId} : { spaceId : string, userId : string}) {
 
-  const spaces = useSelector((state : RootState)  => state.spaces)
+  // Cambiar por tasks para traer siempre que no renderice los datos desde el state global
+  const tasks = useSelector((state : RootState)  => state.tasks)
   const [error, setError] = useState<string | null>(null)
 
   const dispatch = useDispatch()
 
-  const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*')
+  console.log({
+    spaceId,
+    userId
+  })
 
-    if(error) {
-      console.log(error)
-      setError(error.message)
-    }
+  const getTasks = useCallback(async (spaceId : string, userId : string) => {
+    try {
+      const { data, status } = await supabase.from('tasks').select('*').gte('user_id', `${userId}`).gte('space_id', `${spaceId}`)
+      if(!data) {
+        throw new Error('No hay ningún espacio disponible')
+      }
 
-    if(data){
-      console.log({ data })
-      dispatch(updateInitialState(data))
-      
+      console.log({
+        taskdata: data
+      })
+
+      dispatch(updateInitialTaskState(data))
+
+    } catch(error){
+      throw new Error('Falló al obtener tareas para este espacio')
     }
-  }),[dispatch]
-)
+  },[dispatch])
 
   useEffect(() => {
-    getSpaces()
-  }, [getSpaces])
+    getTasks(spaceId, userId)
+  },[spaceId, userId, getTasks])
 
   
   error && (
@@ -44,7 +53,7 @@ function TaskList() {
     </div>
   )
 
-  if(spaces.length === 0) {
+  if(tasks.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center gap-4 p-2">
         <h3 className="text-lg text-gray-600">No hay espacios. Agrega un nuevo</h3>
@@ -56,22 +65,22 @@ function TaskList() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-4">
-      <h3 className="text-gray-750 text-xl text-center">Listado de espacios</h3>
+      <h3 className="text-gray-750 text-xl text-center">Listado de tareas</h3>
       <div className="flex flex-col justify-center items-center gap-2">
         { 
-            spaces.map(space => {
+            tasks.map(task => {
               return (
-                <Card key={ space.id } className="p-2 min-w-[100%]">
+                <Card key={ task.id } className="p-2 min-w-[100%]">
                   
                     <div className="grid grid-cols-5 justify-items-center content-center">
                       <div className="col-span-4 grid content-center justify-items-start w-full">
-                        <Link href={`/spaces/${space.id}`}>
-                          <p> <span className="text-luissdev-550">📁</span> { space.title }</p>
+                        <Link href={`/spaces/${task.id}`}>
+                          <p> <span className="text-luissdev-550">📁</span> { task.title }</p>
                           {/* <p className="">{ space.description }</p> */}
                         </Link>
                       </div>
                       <div className="col-span-1 my-auto">
-                        <Button onClick={ () => console.log(`Eliminar space con id ${space.id}`) } variant={'outline'} >🗑️</Button>
+                        <Button onClick={ () => console.log(`Eliminar space con id ${task.id}`) } variant={'outline'} >🗑️</Button>
                       </div>
                     </div>
                   

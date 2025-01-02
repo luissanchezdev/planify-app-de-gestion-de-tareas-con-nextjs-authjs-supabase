@@ -8,8 +8,10 @@ import { useCallback, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { updateInitialState } from "@/redux/slices/spaceSlice"
-import AddTaskForm from "@/components/tasks/TaskForm"
+import AddTaskForm from "@/components/tasks/AddTaskForm"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { getAllSpaces } from "@/services/spaceService"
+import TaskList from "@/components/tasks/TaskList"
 
 interface ITestFormInputs {
   title : string
@@ -18,52 +20,43 @@ interface ITestFormInputs {
 
 function SpaceDetailPage() {
   const [ error, setError ] = useState<string>('')
-  const { idSpace } = useParams()
+  const params = useParams<{ idSpace : string }>()
+  const { idSpace } = params
   console.log({ idSpace })
   
-  const { 
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<ITestFormInputs>()
+  const { user } = useSelector((state : RootState) => {
+    return state.user
+  })
+
+  const userId = user?.id
 
 
   const dispatch = useDispatch()
 
-  const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*')
-
-    if(error) {
-      console.log(error)
-      setError(error.message)
-    }
-
-    if(data){
-      console.log({ data })
-      dispatch(updateInitialState(data))
+  const getSpaces = useCallback(async () => {
+    try {
+      const response = await getAllSpaces()
+      console.log(response)
+      dispatch(updateInitialState(response))
       
+    } catch (error) {
+      throw new Error('Fallo al obtener los espacios')
     }
-  }),[dispatch]
-)
+  },[dispatch])
 
   useEffect(() => {
     getSpaces()
-  }, [getSpaces])
+  },[getSpaces])
+
 
   const spaces = useSelector((state : RootState) => {
     return state.spaces
   })
-
-  console.log({ spaces })
-
+  
   const space = (spaces.filter(space => space.id === idSpace))[0]
-  console.log({ space })
+
   if(!space){
     return  <p>Espacio no encontrado</p>
-  }
-
-  const onSumitTwo = (data : ITestFormInputs) => {
-    console.log({ data })
   }
   
 
@@ -91,18 +84,22 @@ function SpaceDetailPage() {
       </Card>
     </div>
     <div className="flex flex-col gap-4 p-4">
-      <AddTaskForm
-        spaceId={ space.id }
-        userId={ space.user_id }
-    />
+      {
+        userId && 
+        <>
+          <AddTaskForm 
+            spaceId={idSpace} 
+            userId={userId} 
+          />
+          <TaskList 
+            spaceId={ idSpace }
+            userId={ userId }
+          />
+        </>
+      }
+      {
 
-    </div>
-    <div>
-      <h3>Formulario de prueba</h3>
-      <form onSubmit={handleSubmit(onSumitTwo)}>
-        <input type="text" {...register('title')} />
-        <button type="submit">Enviar</button>
-      </form>
+      }
     </div>
     </>
     

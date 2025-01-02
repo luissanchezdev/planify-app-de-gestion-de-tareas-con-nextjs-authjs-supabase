@@ -5,13 +5,20 @@ import type { RootState } from "@/redux/store"
 import { auth } from "@/auth"
 import { getUserAuthenticated } from "../../services/authService"
 import { DefaultSession } from "next-auth"
+import { useDispatch } from "react-redux"
+import AvatarCustom from "@/components/ui/customs/AvatarCustom"
 
 async function LayoutSpaces({ children } : { children : React.ReactNode}) {
 
   const session = await auth()
 
   if(session) {
-    await getUserAuthenticated(session)
+    try{
+      const response = await getUserAuthenticated(session)
+
+    } catch(error) {
+
+    }
   }
 
   if(!session) {
@@ -30,7 +37,10 @@ async function LayoutSpaces({ children } : { children : React.ReactNode}) {
                 Planify
               </Link>
             </h1>
+            <div className="flex flex-row">
+            <AvatarCustom />
             <BtnSignOut />
+            </div>
           </header>
           { children}        
         </div>

@@ -28,8 +28,6 @@ function AddSpaceForm() {
 
   // En componentes de cliente no se usa el adaptador de auth ni de supabase ?, se usa el hook useSession. Pero para esto debo usar el provider SessionProvider en el componente padre. En este caso en /spaces/page.tsx que es el componente padre.
   const { data: session } = useSession()
-  console.log(session)
-
   const dispatch = useDispatch()
 
   const {

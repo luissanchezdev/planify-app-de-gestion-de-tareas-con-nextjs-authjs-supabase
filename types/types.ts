@@ -13,6 +13,7 @@ export interface IAddTaskFormInputs {
 }
 
 export interface ITaskData {
+  id? : string,
   space_id: string,
   user_id : string,
   title: string,
@@ -31,6 +32,13 @@ export interface IUser {
   name: string;
   email: string;
   image: string;
+}
+
+export interface IUserState {
+  user: IUser | null,
+  isAuthenticated: boolean,
+  token: string | null,
+  expiresAt: string | null
 }
 
 export interface ISession {
