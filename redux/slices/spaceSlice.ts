@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import SpaceService from "@/app/services/spaceService";
+import SpaceService from "@/services/spaceService";
 import { ISpace } from "@/types/types";
 
 let initialState : ISpace[] = []

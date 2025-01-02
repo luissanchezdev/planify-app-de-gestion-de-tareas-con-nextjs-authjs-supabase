@@ -1,15 +1,14 @@
 "use client"
-
-import { RootState } from "@/store"
+import type { RootState } from "@/redux/store"
 import { useParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import Link from "next/link"
-import { Card } from "../../components/ui/card"
+import { Card } from "../../../components/ui/card"
 import { useCallback, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
-import { updateInitialState } from "@/lib/redux/slices/spaceSlice"
-import AddTaskForm from "@/app/components/tasks/TaskForm"
+import { updateInitialState } from "@/redux/slices/spaceSlice"
+import AddTaskForm from "@/components/tasks/TaskForm"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 interface ITestFormInputs {

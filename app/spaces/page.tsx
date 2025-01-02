@@ -1,13 +1,16 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
-import AddSpaceForm from "../components/spaces/AddSpaceForm";
+import AddSpaceForm from "@/components/spaces/AddSpaceForm";
 import { SessionProvider, signOut } from "next-auth/react";
-import SpaceList from "../components/spaces/SpaceList";
-import BtnSignOut from "../components/signout";
+import SpaceList from "@/components/spaces/SpaceList";
+import BtnSignOut from "@/components/signout";
 import Link from "next/link";
+import { getUserAuthenticated } from "../../services/authService";
 
 async function Spaces() {
   const session = await auth()
+  
+
 
   return (
     <div className="flex flex-col justify-center items-center gap-6">

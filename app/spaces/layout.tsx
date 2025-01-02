@@ -1,9 +1,25 @@
 import Link from "next/link"
-import BtnSignOut from "../components/signout"
+import BtnSignOut from "@/components/signout"
 import Providers from "../Providers"
-import { store } from "@/store"
+import type { RootState } from "@/redux/store"
+import { auth } from "@/auth"
+import { getUserAuthenticated } from "../../services/authService"
+import { DefaultSession } from "next-auth"
 
-function LayoutSpaces({ children } : { children : React.ReactNode}) {
+async function LayoutSpaces({ children } : { children : React.ReactNode}) {
+
+  const session = await auth()
+
+  if(session) {
+    await getUserAuthenticated(session)
+  }
+
+  if(!session) {
+    return (
+      <>Usuario no autenticado</>
+    )
+  }
+
   return (
     <Providers>  
       <div className="min-h-screen flex flex-col justify-between">

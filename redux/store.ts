@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import spaceReducer from "./lib/redux/slices/spaceSlice";
-import taskReducer from "./lib/redux/slices/taskSlice";
+import  spaceReducer from "./slices/spaceSlice"
+import  taskReducer from "./slices/taskSlice"
 
 export const store = configureStore({
   reducer: {

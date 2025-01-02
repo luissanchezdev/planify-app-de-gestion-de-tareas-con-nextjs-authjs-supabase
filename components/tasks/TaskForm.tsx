@@ -8,7 +8,7 @@ import { Card } from "../ui/card"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { IAddTaskFormInputs, ITaskData, ITaskProps } from "@/types/types"
-import { addTask } from "@/lib/redux/slices/taskSlice"
+import { addTask } from "@/redux/slices/taskSlice"
 
 
 function AddTaskForm({ userId, spaceId } : ITaskProps) {
