@@ -17,7 +17,6 @@ interface ITestFormInputs {
   title : string
 }
 
-
 function SpaceDetailPage() {
   const [ error, setError ] = useState<string>('')
   const params = useParams<{ idSpace : string }>()
@@ -33,9 +32,9 @@ function SpaceDetailPage() {
 
   const dispatch = useDispatch()
 
-  const getSpaces = useCallback(async () => {
+  const getSpaces = useCallback(async (userId : string) => {
     try {
-      const response = await getAllSpaces()
+      const response = await getAllSpaces(userId)
       console.log(response)
       dispatch(updateInitialState(response))
       
@@ -45,8 +44,10 @@ function SpaceDetailPage() {
   },[dispatch])
 
   useEffect(() => {
-    getSpaces()
-  },[getSpaces])
+    if(user && user.id){
+      getSpaces(user.id)
+    }
+  },[getSpaces, user])
 
 
   const spaces = useSelector((state : RootState) => {

@@ -10,32 +10,15 @@ import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
 
-function SpaceList() {
+function SpaceList({ spaces } : { spaces : ISpace[]}) {
 
-  const spaces = useSelector((state : RootState)  => state.spaces)
+  
   const user = useSelector((state : RootState)  => state.user)
   const [error, setError] = useState<string | null>(null)
 
   const dispatch = useDispatch()
 
-  const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*').gte('user_id', `${user.user?.id}` )
-
-    if(error) {
-      console.log(error)
-      setError(error.message)
-    }
-
-    if(data){
-      dispatch(updateInitialState(data))
-      
-    }
-  }),[dispatch, user.user?.id]
-)
-
-  useEffect(() => {
-    getSpaces()
-  }, [getSpaces])
+  
 
   
   error && (
