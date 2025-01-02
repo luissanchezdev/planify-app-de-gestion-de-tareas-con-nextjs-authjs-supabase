@@ -14,7 +14,6 @@ export const getUserAuthenticated = async (session : DefaultSession) => {
       expiresAt: data.expires
     }
 
-
-    console.log({ newState })
+    return newState
    }
 }

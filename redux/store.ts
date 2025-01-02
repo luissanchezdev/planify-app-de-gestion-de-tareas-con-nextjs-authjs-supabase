@@ -5,7 +5,7 @@ import  taskReducer from "./slices/taskSlice"
 export const store = configureStore({
   reducer: {
     'spaces' : spaceReducer,
-    'tasks' : taskReducer
+    'tasks' : taskReducer,
   }
 })
 

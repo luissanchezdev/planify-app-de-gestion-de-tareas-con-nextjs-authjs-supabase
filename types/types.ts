@@ -26,7 +26,7 @@ export interface ITaskProps {
   spaceId: string
 }
 
-export interface User {
+export interface IUser {
   id: string;
   name: string;
   email: string;
@@ -34,7 +34,7 @@ export interface User {
 }
 
 export interface ISession {
-  user: User;
+  user: IUser;
   id?: string;
   expires: string;
   sessionToken?: string;
