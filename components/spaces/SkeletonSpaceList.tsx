@@ -27,6 +27,54 @@ function SkeletonSpaceList() {
                 </div>
               </div>          
           </Card>
+          <Card className="p-2 w-full">
+              <div className="grid grid-cols-5 justify-items-center content-center">
+                <div className="col-span-4 grid content-center justify-items-start w-full">
+                  <div>
+                    <Skeleton> <span className="text-luissdev-550 h-4">📁</span> Cargando tarea...</Skeleton>
+                  </div>
+                </div>
+                <div className="col-span-1 my-auto">
+                  <Button  
+                    variant={'outline'}
+                  >
+                    🗑️
+                  </Button>
+                </div>
+              </div>          
+          </Card>
+          <Card className="p-2 w-full">
+              <div className="grid grid-cols-5 justify-items-center content-center">
+                <div className="col-span-4 grid content-center justify-items-start w-full">
+                  <div>
+                    <Skeleton> <span className="text-luissdev-550 h-4">📁</span> Cargando tarea...</Skeleton>
+                  </div>
+                </div>
+                <div className="col-span-1 my-auto">
+                  <Button  
+                    variant={'outline'}
+                  >
+                    🗑️
+                  </Button>
+                </div>
+              </div>          
+          </Card>
+          <Card className="p-2 w-full">
+              <div className="grid grid-cols-5 justify-items-center content-center">
+                <div className="col-span-4 grid content-center justify-items-start w-full">
+                  <div>
+                    <Skeleton> <span className="text-luissdev-550 h-4">📁</span> Cargando tarea...</Skeleton>
+                  </div>
+                </div>
+                <div className="col-span-1 my-auto">
+                  <Button  
+                    variant={'outline'}
+                  >
+                    🗑️
+                  </Button>
+                </div>
+              </div>          
+          </Card>
         </div>
       </div>
     </section>

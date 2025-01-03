@@ -100,20 +100,16 @@ function Spaces() {
   return (
     <div className="flex flex-col justify-center items-center gap-6 max-w-screen-md mx-auto">
       <main className="w-full mx-auto">
-        {
-          <div className="flex flex-col gap-4 p-4 w-full">
-            <header>
-              <AddSpaceForm />
-            </header>
-            <section className="border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
-              <SpaceList 
-                spaces={ spaces }
-              />
-            </section>
-          </div>
-
-
-        }
+        <div className="flex flex-col gap-4 p-4 w-full">
+          <header>
+            <AddSpaceForm />
+          </header>
+          <section className="border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
+            <SpaceList 
+              spaces={ spaces }
+            />
+          </section>
+        </div>
       </main>
     </div>
   )
