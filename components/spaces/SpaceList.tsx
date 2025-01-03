@@ -2,42 +2,36 @@
 import { useState, useEffect, useCallback } from "react"
 import type { ISpace } from "@/types/types"
 import { useSelector } from "react-redux"
-import type { RootState } from "@/store"
+import type { RootState } from "@/redux/store"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
-import { updateInitialState } from "@/lib/redux/slices/spaceSlice"
-import { Card } from "@/components/ui/card"
+import { updateInitialState, deleteSpace } from "@/redux/slices/spaceSlice"
+import { Card } from "../ui/card"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "../ui/button"
 
-function SpaceList() {
+function SpaceList({ spaces } : { spaces : ISpace[]}) {
 
-  const spaces = useSelector((state : RootState)  => state.spaces)
+  
+  const user = useSelector((state : RootState)  => state.user)
   const [error, setError] = useState<string | null>(null)
 
   const dispatch = useDispatch()
 
-  const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*')
-
-    if(error) {
-      console.log(error)
-      setError(error.message)
-    }
-
-    if(data){
-      console.log({ data })
-      dispatch(updateInitialState(data))
+  const handleDeleteSpace = async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('spaces')
+        .delete()
+        .eq('id', id)
       
+      if (error) throw error
+      dispatch(deleteSpace(id))
+    } catch (error) {
+      throw new Error('Falló la eliminación del espacio')
     }
-  }),[dispatch]
-)
+  }
 
-  useEffect(() => {
-    getSpaces()
-  }, [getSpaces])
-
-  
   error && (
     <div className="bg-red-600 text-white">
       <p>Se ha presentado un problema recuperando los datos</p>
@@ -71,7 +65,12 @@ function SpaceList() {
                         </Link>
                       </div>
                       <div className="col-span-1 my-auto">
-                        <Button onClick={ () => console.log(`Eliminar space con id ${space.id}`) } variant={'outline'} >🗑️</Button>
+                        <Button 
+                          onClick={() => space.id && handleDeleteSpace(space.id)} 
+                          variant={'outline'}
+                        >
+                          🗑️
+                        </Button>
                       </div>
                     </div>
                   
