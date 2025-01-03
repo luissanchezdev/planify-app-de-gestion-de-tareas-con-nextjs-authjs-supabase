@@ -90,7 +90,7 @@ function Spaces() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-6">
+    <div className="flex flex-col justify-center items-center gap-6 max-w-screen-md mx-auto">
         <div className="flex gap-1 text-xl text-gray-400 text-center">
           <Link href={'/'} className="inline-block ">
             <p>Inicio</p>
@@ -100,9 +100,9 @@ function Spaces() {
             <h2> Espacios 🚀</h2>
           </Link>
       </div>
-      <main>
+      <main className="w-full mx-auto">
         {
-          <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-4 p-4 w-full">
             <header>
               <AddSpaceForm />
             </header>

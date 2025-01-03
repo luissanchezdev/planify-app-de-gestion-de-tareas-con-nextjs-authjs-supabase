@@ -24,6 +24,7 @@ function SpaceDetailPage() {
   const { data: session, status } = useSession()
 
   const initializeUserAndSpaces = useCallback(async () => {
+
     if (session && status === "authenticated") {
       try {
         const userResponse = await getUserAuthenticated(session)
@@ -70,7 +71,7 @@ function SpaceDetailPage() {
   }
 
   return (
-    <>
+    <div className="max-w-screen-md mx-auto">
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1 text-xl text-gray-400 text-center">
         <div className="flex gap-1 text-xl text-gray-400 justify-center">
@@ -106,7 +107,7 @@ function SpaceDetailPage() {
         </>
       }
     </div>
-    </>
+    </div>
     
   )
 }

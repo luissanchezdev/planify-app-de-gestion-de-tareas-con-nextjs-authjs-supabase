@@ -8,7 +8,7 @@ function SignIn() {
         await signIn("google")
       }}
     >
-      <button type="submit">Inicio de sesión con Google</button>
+      <button type="submit" className="bg-black hover:bg-gray-800 text-white border rounded-md py-2 px-4 my-2">Inicio de sesión con Google</button>
     </form>
   )
 } 

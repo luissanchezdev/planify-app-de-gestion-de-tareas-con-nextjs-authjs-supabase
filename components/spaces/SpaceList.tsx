@@ -51,11 +51,11 @@ function SpaceList({ spaces } : { spaces : ISpace[]}) {
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <h3 className="text-gray-750 text-xl text-center">Listado de espacios</h3>
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col justify-center items-center gap-2 min-w-[100%] md:min-w-[80%]">
         { 
             spaces.map(space => {
               return (
-                <Card key={ space.id } className="p-2 min-w-[100%]">
+                <Card key={ space.id } className="p-2 w-full">
                   
                     <div className="grid grid-cols-5 justify-items-center content-center">
                       <div className="col-span-4 grid content-center justify-items-start w-full">

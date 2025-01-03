@@ -13,7 +13,7 @@ function TaskList({tasks} : { tasks : ITaskData[]}) {
 
   if(tasks.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center gap-4 p-2">
+      <div className="flex flex-col justify-center items-center gap-4 p-2 border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
         <h3 className="text-lg text-gray-600">No hay espacios. Agrega un nuevo</h3>
         <p className="text-8xl text-gray-700">⊕</p>
       </div>
@@ -33,14 +33,13 @@ function TaskList({tasks} : { tasks : ITaskData[]}) {
 
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4">
+    <div className="flex flex-col justify-center items-center gap-4 border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
       <h3 className="text-gray-750 text-xl text-center">Listado de tareas</h3>
-      <div className="flex flex-col justify-center items-center gap-2">
-      <div>
+      <div className="flex flex-col justify-center items-center gap-2 min-w-[100%] md:min-w-[80%]">
         { 
             tasks.map(task => {
               return (
-                <Card key={ task.id } className="p-2 min-w-[100%]">
+                <Card key={ task.id } className="p-2 w-full">
                   
                     {
                       task.id && (
@@ -67,7 +66,6 @@ function TaskList({tasks} : { tasks : ITaskData[]}) {
             })
             
         }
-      </div>
       </div>
     </div>
   )
