@@ -57,3 +57,10 @@ export enum ETypeNotification {
   'warning' = 'WARNING',
   'error' = 'ERROR'
 }
+
+export enum ELoadingState {
+  IDLE = 'idle',
+  LOADING = 'loading',
+  SUCCEEDED = 'succeeded',
+  FAILED = 'failed'
+}

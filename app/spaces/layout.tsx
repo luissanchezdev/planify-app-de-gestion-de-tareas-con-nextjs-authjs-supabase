@@ -3,6 +3,7 @@ import BtnSignOut from "@/components/signout"
 import Providers from "../Providers"
 import AvatarCustom from "@/components/ui/customs/AvatarCustom"
 import { ToastContainer } from "react-toastify"
+import BreadCrumbs from "@/components/BreadCrumbs"
 
 async function LayoutSpaces({ children } : { children : React.ReactNode}) {
 
@@ -10,17 +11,20 @@ async function LayoutSpaces({ children } : { children : React.ReactNode}) {
 
       <div className="min-h-screen flex flex-col justify-between">
         <div>
-          <header className="flex flex-md justify-between items-center p-4">
-            <h1 className="text-2xl text-gray-800 text-center">
-              <Link href={'/'}>
-                Planify
-              </Link>
-            </h1>
-            <div className="flex flex-row">
-            <AvatarCustom />
-            <BtnSignOut />
-            </div>
-          </header>
+          <div className="flex flex-col flex-md justify-between items-center p-4">
+            <header className="flex flex-row flex-md justify-between items-center p-4 w-full">
+              <h1 className="text-2xl text-gray-800 text-center">
+                <Link href={'/'}>
+                  Planify
+                </Link>
+              </h1>
+              <div className="flex flex-row">
+                <AvatarCustom />
+                <BtnSignOut />
+              </div>
+            </header>
+            <BreadCrumbs />
+          </div>
           { children}
           <ToastContainer />        
         </div>

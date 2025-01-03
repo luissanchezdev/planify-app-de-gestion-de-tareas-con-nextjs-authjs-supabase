@@ -18,6 +18,9 @@ import { useSession } from "next-auth/react";
 import { updateUserState } from "@/redux/slices/userAuthenticatedSlice";
 import Providers from "../Providers";
 import { resetTask } from "@/redux/slices/taskSlice";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import SkeletonAddSpaceForm from "@/components/spaces/SkeletonAddSpaceForm";
+import SkeletonSpaceList from "@/components/spaces/SkeletonSpaceList";
 
 
 function Spaces() {
@@ -82,7 +85,12 @@ function Spaces() {
   }, [getSpaces, user])
 
   if (isLoading) {
-    return <div>Cargando...</div>
+    return (
+      <div className="flex flex-col gap-4 p-4 w-full">
+        <SkeletonAddSpaceForm />
+        <SkeletonSpaceList />
+      </div>
+    )
   }
 
   if (error) {
@@ -91,15 +99,6 @@ function Spaces() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-6 max-w-screen-md mx-auto">
-        <div className="flex gap-1 text-xl text-gray-400 text-center">
-          <Link href={'/'} className="inline-block ">
-            <p>Inicio</p>
-          </Link>
-          /
-          <Link href={'/spaces'} className="inline-block text-gray-700">
-            <h2> Espacios 🚀</h2>
-          </Link>
-      </div>
       <main className="w-full mx-auto">
         {
           <div className="flex flex-col gap-4 p-4 w-full">
