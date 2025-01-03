@@ -2,6 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useSelector } from "react-redux";
 import { selectUser, selectSpaces } from "@/redux/selectors";
+import { Skeleton } from "../skeleton";
 
 function AvatarCustom() {
   const user = useSelector(selectUser)
@@ -10,7 +11,9 @@ function AvatarCustom() {
   if (!user) {
     return (
       <Avatar className="">
-        <AvatarFallback>Loading...</AvatarFallback>
+        <AvatarFallback>
+          <Skeleton className="bg-luissdev-850 h-[48px] w-[48px] rounded-full"></Skeleton>
+        </AvatarFallback>
       </Avatar>
     )
   }
