@@ -23,7 +23,6 @@ async function LayoutSpaces({ children } : { children : React.ReactNode}) {
                 <BtnSignOut />
               </div>
             </header>
-            <BreadCrumbs />
           </div>
           { children}
           <ToastContainer />        

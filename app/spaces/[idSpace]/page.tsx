@@ -1,6 +1,6 @@
 "use client"
 import type { RootState } from "@/redux/store"
-import { useParams } from "next/navigation"
+import { redirect, useParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import Link from "next/link"
 import { Card } from "../../../components/ui/card"
@@ -15,6 +15,11 @@ import { useSession } from "next-auth/react"
 import { updateUserState } from "@/redux/slices/userAuthenticatedSlice"
 import { getTasks } from "@/services/taskService"
 import { updateInitialTaskState } from "@/redux/slices/taskSlice"
+import { Skeleton } from "@/components/ui/skeleton"
+import SkeletonAddTaskForm from "@/components/tasks/SkeletonAddTaskForm"
+import SkeletonTaskList from "@/components/tasks/SkeletonTaskList"
+import BreadCrumbs from "@/components/BreadCrumbs"
+import SkeletonBreadCrumbs from "@/components/SkeletonBreadCrumbs"
 
 function SpaceDetailPage() {
   const [error, setError] = useState<string>('')
@@ -22,6 +27,7 @@ function SpaceDetailPage() {
   const { idSpace } = params
   const dispatch = useDispatch()
   const { data: session, status } = useSession()
+  const [isLoadingSpaces, setIsLoadingSpaces] = useState<boolean>(true)
 
   const initializeUserAndSpaces = useCallback(async () => {
 
@@ -33,6 +39,7 @@ function SpaceDetailPage() {
         if(userResponse.user?.id){
           const spacesResponse = await getAllSpaces(userResponse.user?.id)
           dispatch(updateInitialState(spacesResponse))
+          setIsLoadingSpaces(false)
           
           const taskResponse = await getTasks(idSpace, userResponse.user.id)
           dispatch(updateInitialTaskState(taskResponse))
@@ -54,17 +61,31 @@ function SpaceDetailPage() {
 
   const userId = user?.id
   
-  if (status === "loading") {
-    return <Card className="w-h-[200px] bg-white">
-    <input />
-  </Card>
+  if (status === "loading" || isLoadingSpaces) {
+    return (
+      <>
+        <div className="max-w-screen-md mx-auto">
+          <SkeletonBreadCrumbs />
+          <div className="flex flex-col gap-6">
+            <Card className="m-4 p-4 flex flex-col ">
+              <h3 className=""> Descripción </h3>
+              <Skeleton className="h-">🔖 Etiqueta</Skeleton>
+            </Card>
+          </div>
+          <div className="flex flex-col gap-4 p-4">
+            <SkeletonAddTaskForm />
+            <SkeletonTaskList />
+          </div>
+        </div>
+      </>
+    )
   }
 
   if (status === "unauthenticated") {
-    return <div>Por favor, inicia sesión para ver este contenido</div>
+    redirect('/')
   }
 
-  const space = spaces.find(space => space.id === idSpace)
+  const space = !isLoadingSpaces && spaces.find(space => space.id === idSpace)
 
   if (!space) {
     return <p>Espacio no encontrado</p>
@@ -72,22 +93,13 @@ function SpaceDetailPage() {
 
   return (
     <div className="max-w-screen-md mx-auto">
+      <BreadCrumbs 
+        size={3}
+        space={
+        {spaceId : space.id ? space.id : '', title : space.title}
+        }
+      />
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1 text-xl text-gray-400 text-center">
-        <div className="flex gap-1 text-xl text-gray-400 justify-center">
-          <Link href={'/'} className="inline-block ">
-            <p>Inicio</p>
-          </Link>
-          /
-          <Link href={'/spaces'} className="inline-block text-gray-400">
-            <h2> Espacios</h2>
-          </Link>
-          /
-        </div>
-        <Link href={`/spaces/${idSpace}`} className="inline-block text-gray-700">
-          <h2> { space.title} 🚀</h2>
-        </Link>
-      </div>
       <Card className="m-4 p-4">
         <p>{ space.description }</p>
         <p>🔖 { space.tag }</p>
