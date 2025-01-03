@@ -13,7 +13,6 @@ export const spaceSlice = createSlice({
       return [
         ...state,
         {
-          id: crypto.randomUUID(),
           ...action.payload
         }
       ]
@@ -22,9 +21,12 @@ export const spaceSlice = createSlice({
       return [
         ...action.payload
       ]
+    },
+    deleteSpace: (state, action: PayloadAction<string>) => {
+      return state.filter(space => space.id !== action.payload)
     }
   }
 })
 
-export const { addSpace, updateInitialState } = spaceSlice.actions
+export const { addSpace, updateInitialState, deleteSpace } = spaceSlice.actions
 export default spaceSlice.reducer

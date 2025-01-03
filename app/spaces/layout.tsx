@@ -6,7 +6,7 @@ import AvatarCustom from "@/components/ui/customs/AvatarCustom"
 async function LayoutSpaces({ children } : { children : React.ReactNode}) {
 
   return (
-    <Providers>  
+
       <div className="min-h-screen flex flex-col justify-between">
         <div>
           <header className="flex flex-md justify-between items-center p-4">
@@ -26,7 +26,7 @@ async function LayoutSpaces({ children } : { children : React.ReactNode}) {
           <p className="text-gray-500">Desarrollado por <a href='#'>Luis Sanchez</a> @{ new Date().getFullYear() }</p>
         </footer>
       </div>
-    </Providers>
+
   )
 }
 

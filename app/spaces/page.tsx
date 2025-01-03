@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { updateInitialState } from '@/redux/slices/spaceSlice';
 import { useSession } from "next-auth/react";
 import { updateUserState } from "@/redux/slices/userAuthenticatedSlice";
+import Providers from "../Providers";
+import { resetTask } from "@/redux/slices/taskSlice";
 
 
 function Spaces() {
@@ -30,6 +32,10 @@ function Spaces() {
   })
 
   const { data : session, status} = useSession()
+
+  useEffect(() => {
+    dispatch(resetTask())
+  },[dispatch])
 
   const getUser = async() => {
     try{
@@ -96,18 +102,18 @@ function Spaces() {
       </div>
       <main>
         {
-            <SessionProvider>
-              <div className="flex flex-col gap-4 p-4">
-                <header>
-                  <AddSpaceForm />
-                </header>
-                <section className="border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
-                  <SpaceList 
-                    spaces={ spaces }
-                  />
-                </section>
-              </div>
-            </SessionProvider>
+          <div className="flex flex-col gap-4 p-4">
+            <header>
+              <AddSpaceForm />
+            </header>
+            <section className="border-luissdev-250 shadow-md shadow-luissdev-250 py-4 px-2 rounded-md bg-luissdev-250">
+              <SpaceList 
+                spaces={ spaces }
+              />
+            </section>
+          </div>
+
+
         }
       </main>
     </div>

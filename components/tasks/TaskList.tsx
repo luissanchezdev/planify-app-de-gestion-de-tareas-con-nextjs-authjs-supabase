@@ -1,57 +1,15 @@
 "use client"
-import { useState, useEffect, useCallback } from "react"
-import type { ISpace } from "@/types/types"
-import { useSelector } from "react-redux"
-import type { RootState } from "@/redux/store"
-import { supabase } from "@/lib/supabaseClient"
-import { useDispatch } from "react-redux"
-import { updateInitialState } from "@/redux/slices/spaceSlice"
+import type { ISpace, ITaskData } from "@/types/types"
 import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { updateInitialTaskState } from "@/redux/slices/taskSlice"
+import { supabase } from "@/lib/supabaseClient"
+import { useDispatch } from "react-redux"
+import { deleteTask } from '@/redux/slices/taskSlice'
 
-function TaskList({spaceId, userId} : { spaceId : string, userId : string}) {
-
-  // Cambiar por tasks para traer siempre que no renderice los datos desde el state global
-  const tasks = useSelector((state : RootState)  => state.tasks)
-  const [error, setError] = useState<string | null>(null)
+function TaskList({tasks} : { tasks : ITaskData[]}) {
 
   const dispatch = useDispatch()
-
-  console.log({
-    spaceId,
-    userId
-  })
-
-  const getTasks = useCallback(async (spaceId : string, userId : string) => {
-    try {
-      const { data, status } = await supabase.from('tasks').select('*').gte('user_id', `${userId}`).gte('space_id', `${spaceId}`)
-      if(!data) {
-        throw new Error('No hay ningún espacio disponible')
-      }
-
-      console.log({
-        taskdata: data
-      })
-
-      dispatch(updateInitialTaskState(data))
-
-    } catch(error){
-      throw new Error('Falló al obtener tareas para este espacio')
-    }
-  },[dispatch])
-
-  useEffect(() => {
-    getTasks(spaceId, userId)
-  },[spaceId, userId, getTasks])
-
-  
-  error && (
-    <div className="bg-red-600 text-white">
-      <p>Se ha presentado un problema recuperando los datos</p>
-    </div>
-  )
 
   if(tasks.length === 0) {
     return (
@@ -62,17 +20,31 @@ function TaskList({spaceId, userId} : { spaceId : string, userId : string}) {
     )
   }
 
+  const handleDeleteTask = async (id : string) => {
+    try{
+      const { data, status } = await supabase.from('tasks').delete().gte('id', id)
+      // implementar action redux
+      console.log(data)
+      dispatch(deleteTask(id))
+    } catch(error){
+      throw new Error('Falló la eliminación de la tarea')
+    }
+  }
+
 
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <h3 className="text-gray-750 text-xl text-center">Listado de tareas</h3>
       <div className="flex flex-col justify-center items-center gap-2">
+      <div>
         { 
             tasks.map(task => {
               return (
                 <Card key={ task.id } className="p-2 min-w-[100%]">
                   
-                    <div className="grid grid-cols-5 justify-items-center content-center">
+                    {
+                      task.id && (
+                        <div className="grid grid-cols-5 justify-items-center content-center">
                       <div className="col-span-4 grid content-center justify-items-start w-full">
                         <Link href={`/spaces/${task.id}`}>
                           <p> <span className="text-luissdev-550">📁</span> { task.title }</p>
@@ -80,16 +52,22 @@ function TaskList({spaceId, userId} : { spaceId : string, userId : string}) {
                         </Link>
                       </div>
                       <div className="col-span-1 my-auto">
-                        <Button onClick={ () => console.log(`Eliminar space con id ${task.id}`) } variant={'outline'} >🗑️</Button>
+                        <Button 
+                          onClick={ () => task.id && handleDeleteTask(task.id) } 
+                          variant={'outline'}
+                        >
+                          🗑️
+                        </Button>
                       </div>
                     </div>
-                  
-                  
+                      )
+                    }
                 </Card>
               )
             })
             
         }
+      </div>
       </div>
     </div>
   )

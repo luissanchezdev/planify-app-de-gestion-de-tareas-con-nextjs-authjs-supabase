@@ -1,14 +1,11 @@
 'use client'
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { selectUser, selectSpaces } from "@/redux/selectors";
 
 function AvatarCustom() {
-
-  const { user } = useSelector((state : RootState) => {
-    return state.user
-  })
-
+  const user = useSelector(selectUser)
+  const spaces = useSelector(selectSpaces)
 
   if (!user) {
     return (

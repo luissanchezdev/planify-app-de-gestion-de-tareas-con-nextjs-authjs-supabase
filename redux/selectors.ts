@@ -2,4 +2,4 @@
     import { RootState } from './store';
     
     export const selectUser = (state: RootState) => state.user.user;
-    export const selectSpaces = (state: RootState) => state.spaces
+    export const selectSpaces = (state: RootState) => state.spaces;

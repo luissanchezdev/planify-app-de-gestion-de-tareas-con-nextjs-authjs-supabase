@@ -1,7 +1,7 @@
 import { User } from "next-auth";
 
 export interface ISpace {
-  id: string,
+  id?: string,
   user_id: string,
   title: string,
   description: string,

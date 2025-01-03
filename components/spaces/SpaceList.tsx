@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
-import { updateInitialState } from "@/redux/slices/spaceSlice"
+import { updateInitialState, deleteSpace } from "@/redux/slices/spaceSlice"
 import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
@@ -18,9 +18,20 @@ function SpaceList({ spaces } : { spaces : ISpace[]}) {
 
   const dispatch = useDispatch()
 
-  
+  const handleDeleteSpace = async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('spaces')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+      dispatch(deleteSpace(id))
+    } catch (error) {
+      throw new Error('Falló la eliminación del espacio')
+    }
+  }
 
-  
   error && (
     <div className="bg-red-600 text-white">
       <p>Se ha presentado un problema recuperando los datos</p>
@@ -54,7 +65,12 @@ function SpaceList({ spaces } : { spaces : ISpace[]}) {
                         </Link>
                       </div>
                       <div className="col-span-1 my-auto">
-                        <Button onClick={ () => console.log(`Eliminar space con id ${space.id}`) } variant={'outline'} >🗑️</Button>
+                        <Button 
+                          onClick={() => space.id && handleDeleteSpace(space.id)} 
+                          variant={'outline'}
+                        >
+                          🗑️
+                        </Button>
                       </div>
                     </div>
                   

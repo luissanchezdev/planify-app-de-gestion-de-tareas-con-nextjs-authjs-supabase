@@ -5,61 +5,69 @@ import { useSelector } from "react-redux"
 import Link from "next/link"
 import { Card } from "../../../components/ui/card"
 import { useCallback, useEffect, useState } from "react"
-import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { updateInitialState } from "@/redux/slices/spaceSlice"
 import AddTaskForm from "@/components/tasks/AddTaskForm"
-import { SubmitHandler, useForm } from "react-hook-form"
 import { getAllSpaces } from "@/services/spaceService"
 import TaskList from "@/components/tasks/TaskList"
-
-interface ITestFormInputs {
-  title : string
-}
+import { getUserAuthenticated } from "@/services/authService"
+import { useSession } from "next-auth/react"
+import { updateUserState } from "@/redux/slices/userAuthenticatedSlice"
+import { getTasks } from "@/services/taskService"
+import { updateInitialTaskState } from "@/redux/slices/taskSlice"
 
 function SpaceDetailPage() {
-  const [ error, setError ] = useState<string>('')
-  const params = useParams<{ idSpace : string }>()
+  const [error, setError] = useState<string>('')
+  const params = useParams<{ idSpace: string }>()
   const { idSpace } = params
-  console.log({ idSpace })
-  
-  const { user } = useSelector((state : RootState) => {
-    return state.user
-  })
-
-  const userId = user?.id
-
-
   const dispatch = useDispatch()
+  const { data: session, status } = useSession()
 
-  const getSpaces = useCallback(async (userId : string) => {
-    try {
-      const response = await getAllSpaces(userId)
-      console.log(response)
-      dispatch(updateInitialState(response))
-      
-    } catch (error) {
-      throw new Error('Fallo al obtener los espacios')
+  const initializeUserAndSpaces = useCallback(async () => {
+    if (session && status === "authenticated") {
+      try {
+        const userResponse = await getUserAuthenticated(session)
+        dispatch(updateUserState(userResponse))
+        
+        if(userResponse.user?.id){
+          const spacesResponse = await getAllSpaces(userResponse.user?.id)
+          dispatch(updateInitialState(spacesResponse))
+          
+          const taskResponse = await getTasks(idSpace, userResponse.user.id)
+          dispatch(updateInitialTaskState(taskResponse))
+        }
+      } catch (error) {
+        setError('Error al cargar los datos')
+        console.error(error)
+      }
     }
-  },[dispatch])
+  }, [session, status, dispatch, idSpace])
 
   useEffect(() => {
-    if(user && user.id){
-      getSpaces(user.id)
-    }
-  },[getSpaces, user])
+    initializeUserAndSpaces()
+  }, [initializeUserAndSpaces])
 
+  const { user } = useSelector((state: RootState) => state.user)
+  const spaces = useSelector((state: RootState) => state.spaces)
+  const tasks = useSelector((state : RootState) => state.tasks)
 
-  const spaces = useSelector((state : RootState) => {
-    return state.spaces
-  })
+  const userId = user?.id
   
-  const space = (spaces.filter(space => space.id === idSpace))[0]
-
-  if(!space){
-    return  <p>Espacio no encontrado</p>
+  if (status === "loading") {
+    return <Card className="w-h-[200px] bg-white">
+    <input />
+  </Card>
   }
-  
+
+  if (status === "unauthenticated") {
+    return <div>Por favor, inicia sesión para ver este contenido</div>
+  }
+
+  const space = spaces.find(space => space.id === idSpace)
+
+  if (!space) {
+    return <p>Espacio no encontrado</p>
+  }
 
   return (
     <>
@@ -93,13 +101,9 @@ function SpaceDetailPage() {
             userId={userId} 
           />
           <TaskList 
-            spaceId={ idSpace }
-            userId={ userId }
+            tasks= { tasks }
           />
         </>
-      }
-      {
-
       }
     </div>
     </>

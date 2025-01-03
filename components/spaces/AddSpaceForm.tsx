@@ -44,7 +44,8 @@ function AddSpaceForm() {
     if(session?.user?.id) {
 
     const dataSpace = {
-      user_id: session?.user?.id,
+        id : crypto.randomUUID(),
+        user_id: session?.user?.id,
         title: data.title,
         description: data.description,
         tag: data.tag
