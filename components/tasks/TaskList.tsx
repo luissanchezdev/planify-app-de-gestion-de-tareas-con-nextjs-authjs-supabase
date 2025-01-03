@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { deleteTask } from '@/redux/slices/taskSlice'
 import { notify } from "@/lib/utils"
+import { AppError, handleApiError } from '@/lib/errorHandling';
 
 function TaskList({tasks} : { tasks : ITaskData[]}) {
 
@@ -21,15 +22,24 @@ function TaskList({tasks} : { tasks : ITaskData[]}) {
     )
   }
 
-  const handleDeleteTask = async (id : string) => {
-    try{
-      const { data, status } = await supabase.from('tasks').delete().gte('id', id)
-      // implementar action redux
-      console.log(data)
-      dispatch(deleteTask(id))
-      notify(`La tarea "${id}" se ha eliminado`, ETypeNotification.warning)
-    } catch(error){
-      throw new Error('Falló la eliminación de la tarea')
+  const handleDeleteTask = async (id: string) => {
+    try {
+      const { data, error } = await supabase.from('tasks').delete().eq('id', id);
+      
+      if (error) {
+        throw new AppError(
+          'No se pudo eliminar la tarea',
+          500,
+          'TASK_DELETE_ERROR'
+        );
+      }
+
+      dispatch(deleteTask(id));
+      notify(`La tarea se ha eliminado correctamente`, ETypeNotification.warning);
+    } catch (error) {
+      const handledError = handleApiError(error);
+      notify(handledError.message, ETypeNotification.error);
+      console.error('Error al eliminar la tarea:', handledError);
     }
   }
 

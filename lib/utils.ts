@@ -7,9 +7,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function notify(message : string, type : ETypeNotification) {
-  type === ETypeNotification.info && toast.info(message, { position : 'bottom-center'})
-  type === ETypeNotification.success && toast.success(message, { position : 'bottom-center'})
-  type === ETypeNotification.error && toast.error(message, { position : 'bottom-center'})
-  type === ETypeNotification.warning && toast.warning(message, { position : 'bottom-center'})
-}
+export const notify = (message: string, type: ETypeNotification) => {
+
+  switch (type) {
+    case ETypeNotification.success:
+      toast.success(message, { position: 'bottom-center'});
+      break;
+    case ETypeNotification.error:
+      toast.error(message, { position: 'bottom-center'});
+      break;
+    case ETypeNotification.warning:
+      toast.warning(message, { position: 'bottom-center'});
+      break;
+    default:
+      toast.info(message, { position: 'bottom-center'});
+  }
+};
