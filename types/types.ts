@@ -50,3 +50,10 @@ export interface ISession {
   sessionToken?: string;
   userId?: string | undefined;
 }
+
+export enum ETypeNotification {
+  'info' = 'INFO',
+  'success' = 'SUCCESS',
+  'warning' = 'WARNING',
+  'error' = 'ERROR'
+}

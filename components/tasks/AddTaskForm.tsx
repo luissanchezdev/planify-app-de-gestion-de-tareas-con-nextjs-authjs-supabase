@@ -7,10 +7,11 @@ import { supabase } from "@/lib/supabaseClient"
 import { Card } from "../ui/card"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { IAddTaskFormInputs, ITaskData, ITaskProps } from "@/types/types"
+import { ETypeNotification, IAddTaskFormInputs, ITaskData, ITaskProps } from "@/types/types"
 import { addTask } from "@/redux/slices/taskSlice"
 import { useParams } from "next/navigation"
 import { RootState } from "@/redux/store"
+import { notify } from "@/lib/utils"
 
 function AddTaskForm({ spaceId, userId } : { spaceId : string, userId : string}) {
 
@@ -51,6 +52,7 @@ function AddTaskForm({ spaceId, userId } : { spaceId : string, userId : string})
       // Despachar solo una vez con los datos de Supabase
       if (dataSupabase) {
         dispatch(addTask(dataSupabase))
+        notify(`Tarea "${dataTask.title}" agregada`, ETypeNotification.success)
         console.log("Tarea creada:", dataSupabase)
         reset()
       }

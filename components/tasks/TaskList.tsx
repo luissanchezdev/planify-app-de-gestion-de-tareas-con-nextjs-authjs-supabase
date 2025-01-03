@@ -1,11 +1,12 @@
 "use client"
-import type { ISpace, ITaskData } from "@/types/types"
+import { ETypeNotification, type ISpace, type ITaskData } from "@/types/types"
 import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
 import { supabase } from "@/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { deleteTask } from '@/redux/slices/taskSlice'
+import { notify } from "@/lib/utils"
 
 function TaskList({tasks} : { tasks : ITaskData[]}) {
 
@@ -26,6 +27,7 @@ function TaskList({tasks} : { tasks : ITaskData[]}) {
       // implementar action redux
       console.log(data)
       dispatch(deleteTask(id))
+      notify(`La tarea "${id}" se ha eliminado`, ETypeNotification.warning)
     } catch(error){
       throw new Error('Falló la eliminación de la tarea')
     }

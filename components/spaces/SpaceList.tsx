@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
-import type { ISpace } from "@/types/types"
+import { ETypeNotification, type ISpace } from "@/types/types"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import { supabase } from "@/lib/supabaseClient"
@@ -9,9 +9,9 @@ import { updateInitialState, deleteSpace } from "@/redux/slices/spaceSlice"
 import { Card } from "../ui/card"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { notify } from "@/lib/utils"
 
 function SpaceList({ spaces } : { spaces : ISpace[]}) {
-
   
   const user = useSelector((state : RootState)  => state.user)
   const [error, setError] = useState<string | null>(null)
@@ -27,6 +27,8 @@ function SpaceList({ spaces } : { spaces : ISpace[]}) {
       
       if (error) throw error
       dispatch(deleteSpace(id))
+      notify(`Espacio con ID ${id} eliminado`, ETypeNotification.warning)
+      
     } catch (error) {
       throw new Error('Falló la eliminación del espacio')
     }

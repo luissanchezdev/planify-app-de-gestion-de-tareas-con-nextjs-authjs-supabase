@@ -2,6 +2,7 @@ import Link from "next/link"
 import BtnSignOut from "@/components/signout"
 import Providers from "../Providers"
 import AvatarCustom from "@/components/ui/customs/AvatarCustom"
+import { ToastContainer } from "react-toastify"
 
 async function LayoutSpaces({ children } : { children : React.ReactNode}) {
 
@@ -20,7 +21,8 @@ async function LayoutSpaces({ children } : { children : React.ReactNode}) {
             <BtnSignOut />
             </div>
           </header>
-          { children}        
+          { children}
+          <ToastContainer />        
         </div>
         <footer className="flex flex-col justify-center items-center md:row md:justify-center">
           <p className="text-gray-500">Desarrollado por <a href='#'>Luis Sanchez</a> @{ new Date().getFullYear() }</p>
