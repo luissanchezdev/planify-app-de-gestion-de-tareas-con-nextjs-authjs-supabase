@@ -1,3 +1,5 @@
+import { User } from "next-auth";
+
 export interface ISpace {
   id: string,
   user_id: string,
@@ -35,7 +37,7 @@ export interface IUser {
 }
 
 export interface IUserState {
-  user: IUser | null,
+  user: User | null,
   isAuthenticated: boolean,
   token: string | null,
   expiresAt: string | null

@@ -14,20 +14,44 @@ import { useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { updateInitialState } from '@/redux/slices/spaceSlice';
+import { useSession } from "next-auth/react";
+import { updateUserState } from "@/redux/slices/userAuthenticatedSlice";
 
 
 function Spaces() {
   const [error, setError] = useState<string>()
+  const [isLoading, setIsLoading] = useState(true)
   const dispatch = useDispatch()
-  const user = useSelector((state : RootState) => {
+  const { user } = useSelector((state : RootState) => {
     return state.user
   })
   const spaces = useSelector((state : RootState) => {
     return state.spaces
   })
 
+  const { data : session, status} = useSession()
+
+  const getUser = async() => {
+    try{
+      if(session){
+        const response = await getUserAuthenticated(session)
+        dispatch(updateUserState(response))
+        setIsLoading(false)
+      }
+    } catch(error) {
+      setError('No hay ningún usuario autenticado')
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  },[session])
+
   const getSpaces = useCallback((async () => {
-    const { data , error } = await supabase.from('spaces').select('*').gte('user_id', `${user.user?.id}` )
+    if (!user) return
+
+    const { data , error } = await supabase.from('spaces').select('*').gte('user_id', user.id)
 
     if(error) {
       console.log(error)
@@ -43,14 +67,21 @@ function Spaces() {
         <>No hay espacios</>
       )
     }
-  }),[dispatch, user.user?.id]
-)
+  }),[dispatch, user])
 
   useEffect(() => {
-    getSpaces()
-  }, [getSpaces])
-  
+    if (user) {
+      getSpaces()
+    }
+  }, [getSpaces, user])
 
+  if (isLoading) {
+    return <div>Cargando...</div>
+  }
+
+  if (error) {
+    return <div>{error}</div>
+  }
 
   return (
     <div className="flex flex-col justify-center items-center gap-6">
