@@ -1,3 +1,4 @@
 # Proyecto Planify
 
-![Mi primer tablero](https://github.com/user-attachments/assets/d72c871b-147a-4592-a75b-b68662040271)
+![Presentación sin título](https://github.com/user-attachments/assets/fac7a671-01fd-43de-b66f-3f2204f538fa)
+
